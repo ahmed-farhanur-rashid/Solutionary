@@ -21,10 +21,10 @@ public class CompUtil {
     /**
      * This method sets up a JPanel with GridBagLayout and a specific background color
      *
-     * @param COLOR The color of the background of the panel.
      * @param PANEL The panel to be created with the specified background.
+     * @param COLOR The color of the background of the panel.
      */
-    public static void setUpPanel (Color COLOR, JPanel PANEL) {
+    public static void setUpPanel (JPanel PANEL, Color COLOR) {
         PANEL.setBackground(COLOR);
         PANEL.setLayout(new GridBagLayout());
         PANEL.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
