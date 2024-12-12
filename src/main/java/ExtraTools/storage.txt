@@ -1,0 +1,6 @@
+//        // Shows Extra Tools Panel
+//        extraToolsButton.addActionListener(e -> cardLayout.show(mainPanel, "ExtraTools"));
+
+//        // Menu Bar Actions
+//        JMenuItem exitItem = new JMenuItem("Exit");
+//        exitItem.addActionListener(e -> System.exit(0));

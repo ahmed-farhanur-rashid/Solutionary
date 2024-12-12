@@ -1,4 +1,4 @@
-package Curve_Fitting;
+package CurveFitting;
 
 public class Linear {
 }

@@ -1,4 +1,4 @@
-package Numerical_Differentiation;
+package NumericalDifferentiation;
 
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;

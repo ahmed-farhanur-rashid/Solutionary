@@ -1,4 +1,4 @@
-package Curve_Fitting;
+package Interpolation;
 
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
@@ -9,14 +9,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 
-public class CurveFittingPanel extends JPanel {
+public class InterpolationPanel extends JPanel {
 
     private static final int FIELD_HEIGHT = 64; // Double the height of fields
     private static final int FONT_SIZE = 18; // Larger text size for fields
     private JTable table;
     private DefaultTableModel tableModel;
 
-    public CurveFittingPanel(Color panelColor) {
+    public InterpolationPanel(Color panelColor) {
 
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, FONT_SIZE));
 
@@ -28,15 +28,25 @@ public class CurveFittingPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5); // Insets are border between elements
         gbc.fill = GridBagConstraints.HORIZONTAL; // Stretches Component Horizontally
 
-        // Row 1: DataPoint and nField
-        addLatexLabel("\\(\\textit{Enter Number of Data Points (n):}\\)", 0, 0, gbc);
-        JTextField nField = createSizedField();
-        addField(nField, 1, 0, 1, gbc);
+        // Row 1: f(x) & Field
+        addLatexLabel("f(x):", 0, 0, gbc);
+        JTextField functionField = createSizedField();
+        addField(functionField, 1, 0, 2, gbc);
 
-        // Row 2: Table Input
-        addLatexLabel("\\(\\textit{Input Table:}\\)", 0, 1, gbc);
+        // Row 2: Number of Element Input
+        addLatexLabel("\\(\\textit{Enter Number of Elements (n):}\\)", 0, 1, gbc);
+        JTextField elementNumField = createSizedField();
+        addField(elementNumField, 1, 1, 1, gbc);
+        JButton enterButton = new JButton("Enter");
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1; // Single column
+        add(enterButton, gbc);
 
-        // Row 2: JTable for input
+        // Row 3: Table Input
+        addLatexLabel("\\(\\textit{Input Table:}\\)", 0, 2, gbc);
+
+        // Row 3: JTable for input
         tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"X", "Y"});
         table = new JTable(tableModel);
         table.setFont(new Font("Arial", Font.BOLD, 16));
@@ -47,54 +57,51 @@ public class CurveFittingPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);                                                // Create a scrollPane
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1; // Span across all three columns
+        gbc.gridy = 2;
+        gbc.gridwidth = 2; // Span across all three columns
         gbc.weightx = 1;   // Allow horizontal expansion
         gbc.weighty = 1;   // Allow vertical expansion
         gbc.fill = GridBagConstraints.BOTH; // Stretch in both directions
         add(scrollPane, gbc);
 
-        // Row 3: comboBox
-        addLatexLabel("\\(\\textit{Type of Eqn. To Fit To Data Points (n):}\\)", 0, 2, gbc);
+        // Row 4: xField
+        addLatexLabel("\\textit{Determine } y = f(x) \\text{ at } x:", 0, 3, gbc);
+        JTextField xField = createSizedField();
+        addField(xField, 1, 3, 1, gbc);
 
-        JComboBox<String> eqnTypeComboBox = new JComboBox<>(new String[]{
-                "<html><b>y = ax + b</b></html>",                   // Bold
-                "<html><b>y = ae<sup>bx</sup></b></html>",          // Superscript
-                "<html><b>y = ab<sup>x</sup></b></html>",           // Superscript
-                "<html><b>y = ax<sup>2</sup> + bx + c</b></html>"   // Quadratic with superscript
-        });
-        eqnTypeComboBox.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
-        addField(eqnTypeComboBox, 1, 2, 1, gbc);
+        JLabel resultLabel = new JLabel("   y = f(x) at x: ");
+        resultLabel.setHorizontalAlignment(SwingConstants.LEFT); // Align text to the left
+        resultLabel.setFont(new Font("Arial", Font.BOLD, 16)); // Optional: Adjust font size and style
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        add(resultLabel, gbc);
 
-        // Row 4: Calculate & Clear
+        // Row 5: Calculate & Result label & Clear
         JButton calculateButton = new JButton("Calculate");
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1; // Single column
         add(calculateButton, gbc);
 
-        JButton clearButton = new JButton("Clear");
+        JButton showStepButton = new JButton("Show Steps");
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(showStepButton, gbc);
+
+        JButton clearButton = new JButton("Clear");
+        gbc.gridx = 2;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(clearButton, gbc);
 
-        // Row 6: Empty
-
-//        JLabel empty = new JLabel("");
-//        gbc.gridx = 0;
-//        gbc.gridy = 4;
-//        gbc.gridwidth = 2;
-//        add(empty, gbc);
-
-        // Row 6: Result Label
-        JLabel resultLabel = new JLabel("Results will be displayed here.");
-        resultLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        // Row: 6 Empty Label
+        JLabel empty = new JLabel("");
         gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        add(resultLabel, gbc);
-
+        gbc.gridy = 5;
+        gbc.gridwidth = 3;
+        add(empty, gbc);
     }
 
     //----------------------------------------------------------------

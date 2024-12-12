@@ -2,11 +2,10 @@ package UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class SolutionarySplashScreen {
     public SolutionarySplashScreen() {
-        // Set DPI-aware system properties (Java 9+ only)
-        System.setProperty("sun.java2d.uiScale", "1.0");
 
         // Create the Splash Screen
         JFrame splashFrame = new JFrame();
@@ -16,13 +15,8 @@ public class SolutionarySplashScreen {
         splashFrame.setLayout(new BorderLayout());
 
         // Load and validate the splash image
-        try {
-            JLabel imageLabel = new JLabel(new ImageIcon("src/resources/SplashScreen.png"));
-            splashFrame.add(imageLabel, BorderLayout.CENTER);
-        } catch (Exception e) {
-            ErrorUtils.noImageError(); // Show error if splash image fails to load
-            return; // Exit if the image fails to load
-        }
+        JLabel imageLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/splashScreen.png"))));
+        splashFrame.add(imageLabel, BorderLayout.CENTER);
 
         // Create a progress bar
         JProgressBar progressBar = new JProgressBar(0, 100); // Range from 0 to 100
@@ -33,6 +27,7 @@ public class SolutionarySplashScreen {
         splashFrame.setVisible(true);
 
         // Start a new thread to update the progress bar
+        // This was created by AI as the behaviour was unpredictable.
         new Thread(() -> {
 
             for (int i = 0; i <= 100; i++) {
@@ -51,7 +46,7 @@ public class SolutionarySplashScreen {
                 });
             }
 
-            // Once progress reaches 100%, close the splash screen and trigger main app opening
+            // Once progress reaches 100%, closes the splash screen and triggers main app opening
             SwingUtilities.invokeLater(() -> {
                 splashFrame.dispose(); // Close splash screen
                 openMainUI(); // Open the main UI
