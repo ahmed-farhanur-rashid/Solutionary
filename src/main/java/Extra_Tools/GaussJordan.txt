@@ -1,0 +1,123 @@
+public class GaussJordanElimination {
+
+    private double[][] rrefMatrix;
+
+    /**
+     * Constructor that performs Gauss-Jordan Elimination to reduce the matrix to RREF.
+     *
+     * @param matrix The augmented matrix (coefficients + constants).
+     */
+    public GaussJordanElimination(double[][] matrix) {
+        this.rrefMatrix = performGaussJordan(matrix);
+    }
+
+    /**
+     * Performs Gauss-Jordan Elimination on the given matrix.
+     *
+     * @param matrix The augmented matrix.
+     * @return The matrix in Reduced Row Echelon Form (RREF).
+     */
+    private double[][] performGaussJordan(double[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        double[][] result = new double[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            result[i] = matrix[i].clone(); // Copy the input matrix to avoid modifying the original
+        }
+
+        for (int i = 0; i < rows; i++) {
+            // Find the pivot
+            int pivotRow = i;
+            for (int k = i + 1; k < rows; k++) {
+                if (Math.abs(result[k][i]) > Math.abs(result[pivotRow][i])) {
+                    pivotRow = k;
+                }
+            }
+
+            // Swap rows to place the pivot at the diagonal
+            double[] temp = result[i];
+            result[i] = result[pivotRow];
+            result[pivotRow] = temp;
+
+            // Check for singular matrix
+            if (Math.abs(result[i][i]) < 1e-10) {
+                throw new IllegalArgumentException("Matrix is singular or does not have a unique solution.");
+            }
+
+            // Normalize the pivot row
+            double pivot = result[i][i];
+            for (int j = 0; j < cols; j++) {
+                result[i][j] /= pivot;
+            }
+
+            // Eliminate all other entries in the current column
+            for (int k = 0; k < rows; k++) {
+                if (k != i) {
+                    double factor = result[k][i];
+                    for (int j = 0; j < cols; j++) {
+                        result[k][j] -= factor * result[i][j];
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns the matrix in its reduced row echelon form.
+     *
+     * @return The RREF matrix.
+     */
+    public double[][] getRREFMatrix() {
+        return this.rrefMatrix;
+    }
+
+    /**
+     * Extracts and returns the solution from the RREF matrix.
+     *
+     * @return A solution array, or null if no unique solution exists.
+     */
+    public double[] getSolution() {
+        int rows = rrefMatrix.length;
+        int cols = rrefMatrix[0].length;
+
+        double[] solution = new double[rows];
+        for (int i = 0; i < rows; i++) {
+            solution[i] = rrefMatrix[i][cols - 1];
+        }
+        return solution;
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        double[][] matrix = {
+            {2, 1, -1, 8},
+            {-3, -1, 2, -11},
+            {-2, 1, 2, -3}
+        };
+
+        try {
+            GaussJordanElimination gje = new GaussJordanElimination(matrix);
+
+            System.out.println("Reduced Row Echelon Form (RREF):");
+            double[][] rrefMatrix = gje.getRREFMatrix();
+            for (double[] row : rrefMatrix) {
+                for (double value : row) {
+                    System.out.printf("%.2f ", value);
+                }
+                System.out.println();
+            }
+
+            System.out.println("\nSolution:");
+            double[] solution = gje.getSolution();
+            for (double x : solution) {
+                System.out.printf("%.2f ", x);
+            }
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}

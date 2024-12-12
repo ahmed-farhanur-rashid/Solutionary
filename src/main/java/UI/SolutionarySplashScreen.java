@@ -3,8 +3,8 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class SplashScreen {
-    public SplashScreen() {
+public class SolutionarySplashScreen {
+    public SolutionarySplashScreen() {
         // Set DPI-aware system properties (Java 9+ only)
         System.setProperty("sun.java2d.uiScale", "1.0");
 
