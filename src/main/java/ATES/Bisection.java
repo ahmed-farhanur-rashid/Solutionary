@@ -1,6 +1,7 @@
 package ATES;
 
-import UI.ErrorUtils;
+import UI.ErrorUtil;
+import UI.CompUtil;
 import net.objecthunter.exp4j.Expression;
 
 import javax.swing.table.DefaultTableModel;
@@ -33,7 +34,7 @@ public class Bisection {
         } while(Math.abs(a - b) >= tolerance && iteration < maxIterations);
 
         if (iteration >= maxIterations) {
-            ErrorUtils.iterationLimitError();
+            ErrorUtil.iterationLimitError();
         }
 
         return mid;

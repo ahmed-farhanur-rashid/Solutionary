@@ -1,6 +1,6 @@
 package ATES;
 
-import UI.ErrorUtils;
+import UI.ErrorUtil;
 import net.objecthunter.exp4j.Expression;
 
 import javax.swing.table.DefaultTableModel;
@@ -41,7 +41,7 @@ public class FalsePosition {
         } while (Math.abs(prev_mid - mid) >= tolerance && iteration < maxIterations);
 
         if (iteration == maxIterations) {
-            ErrorUtils.iterationLimitError();
+            ErrorUtil.iterationLimitError();
         }
 
         return mid;

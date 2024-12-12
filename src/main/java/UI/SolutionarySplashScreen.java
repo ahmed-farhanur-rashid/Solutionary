@@ -35,7 +35,7 @@ public class SolutionarySplashScreen {
                 try {
                     Thread.sleep(20); // Adjust speed of progress bar
                 } catch (InterruptedException e) {
-                    ErrorUtils.interruptionError(); //e.printStackTrace();
+                    ErrorUtil.interruptionError(); //e.printStackTrace();
                 }
 
                 final int progressValue = i;

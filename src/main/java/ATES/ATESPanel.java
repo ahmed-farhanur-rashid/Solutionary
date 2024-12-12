@@ -1,5 +1,5 @@
 package ATES;
-import UI.ErrorUtils;
+import UI.ErrorUtil;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -136,7 +136,7 @@ public class ATESPanel extends JPanel {
                     bField.setText(isNaN ? "No interval found" : String.valueOf(b));
 
                     if(isNaN) {
-                        ErrorUtils.noIntervalError();
+                        ErrorUtil.noIntervalError();
                     }
                 }
                 else {
@@ -151,31 +151,33 @@ public class ATESPanel extends JPanel {
                 tableModel.setRowCount(0);
 
                 assert method != null;
-                if (method.equals("Bisection")) {
+                switch (method) {
+                    case "Bisection" -> {
 
-                    String[] columnNames = {"Iteration", "Lower Bound (a)", "Upper Bound (b)", "Midpoint", "f(Midpoint)"};
-                    tableModel = new DefaultTableModel(columnNames, 0);
-                    table.setModel(tableModel);
+                        String[] columnNames = {"Iteration", "Lower Bound (a)", "Upper Bound (b)", "Midpoint", "f(Midpoint)"};
+                        tableModel = new DefaultTableModel(columnNames, 0);
+                        table.setModel(tableModel);
 
-                    root = Bisection.execute(expression, a, b, tolerance, tableModel);
+                        root = Bisection.execute(expression, a, b, tolerance, tableModel);
 
-                }
-                else if (method.equals("False Position")) {
+                    }
+                    case "False Position" -> {
 
-                    String[] columnNames = {"Iteration", "Lower Bound (a)", "Upper Bound (b)", "Midpoint", "f(a)", "f(b)", "f(Midpoint)"};
-                    tableModel = new DefaultTableModel(columnNames, 0);
-                    table.setModel(tableModel);
+                        String[] columnNames = {"Iteration", "Lower Bound (a)", "Upper Bound (b)", "Midpoint", "f(a)", "f(b)", "f(Midpoint)"};
+                        tableModel = new DefaultTableModel(columnNames, 0);
+                        table.setModel(tableModel);
 
-                    root = FalsePosition.execute(expression, a, b, tolerance, tableModel);
+                        root = FalsePosition.execute(expression, a, b, tolerance, tableModel);
 
-                }
-                else if (method.equals("Newton Raphson")) {
+                    }
+                    case "Newton Raphson" -> {
 
-                    String[] columnNames = {"Iteration", "<html>X<sub>n</sub></html>", "<html>X<sub>n+1</sub></html>"};
-                    tableModel = new DefaultTableModel(columnNames, 0);
-                    table.setModel(tableModel);
+                        String[] columnNames = {"Iteration", "<html>X<sub>n</sub></html>", "<html>X<sub>n+1</sub></html>"};
+                        tableModel = new DefaultTableModel(columnNames, 0);
+                        table.setModel(tableModel);
 
-                    root = NewtonRaphson.execute(expression, a, b, tolerance, tableModel);
+                        root = NewtonRaphson.execute(expression, a, b, tolerance, tableModel);
+                    }
                 }
 
                 resultLabel.setText("Root: " + (Double.isNaN(root) ? "No root in interval" : root));

@@ -1,6 +1,6 @@
 package ATES;
 
-import UI.ErrorUtils;
+import UI.ErrorUtil;
 import net.objecthunter.exp4j.Expression;
 import javax.swing.table.DefaultTableModel;
 
@@ -36,11 +36,11 @@ public class NewtonRaphson {
             } while (Math.abs(x_n_plus_1 - x_n) >= tolerance && iteration < maxIterations);
 
             if (iteration == maxIterations) {
-                ErrorUtils.iterationLimitError();
+                ErrorUtil.iterationLimitError();
             }
         }
         catch (ArithmeticException ex) {
-            ErrorUtils.divisionByZeroError();
+            ErrorUtil.divisionByZeroError();
         }
         return x_n_plus_1; // Return the approximate root
     }
