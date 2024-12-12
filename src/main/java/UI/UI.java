@@ -45,7 +45,7 @@ public class UI extends JFrame {
 
         setUpLookAndFeel();
 
-        setUpFrame();
+        setUpFrame(this);
 
         // Side Panel Creation
         SidePanel sidePanel = new SidePanel(sidePanelColor, frameColor, 280, getHeight());  // foreground, background
@@ -175,14 +175,14 @@ public class UI extends JFrame {
         UIManager.put("Button.font", buttonFont);
     }
 
-    private void setUpFrame () {
+    private void setUpFrame (JFrame frame) {
         // Setting up the frame.
-        setTitle("Solutionary version 0.0.2-Beta.015");
-        setSize(1200, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
-        getContentPane().setBackground(frameColor);
-        setIconImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/frameIcon.png"))).getImage());
+        frame.setTitle("Solutionary 0.1.3-Beta3"); // See Apache Commons Versioning
+        frame.setSize(1200, 720);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setLayout(new BorderLayout());
+        frame.getContentPane().setBackground(frameColor);
+        frame.setIconImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/frameIcon.png"))).getImage());
     }
 }

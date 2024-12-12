@@ -6,11 +6,11 @@ import net.objecthunter.exp4j.Expression;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Weddles {
+public class Simpsons_3_8 {
 
     public static double calculate (Expression expression, double a, double b, int n) {
 
-        if (n % 6 == 0) {
+        if (n % 3 == 0) {
             double h = (b - a) / n;
 
             //List<Double> xList = new ArrayList<>(n+1);
@@ -25,27 +25,27 @@ public class Weddles {
                 yList.add(f(expression, x));
             }
 
-            double firstTerm = 0;
+            double firstTerm;
             double secondTerm = 0;
             double thirdTerm = 0;
 
             // Summing terms
 
-            for (int i = 0; i <= n; i++) {
-                if (i % 2 == 0) {
-                    firstTerm += yList.get(i);
-                }
-                if (i % 2 == 1 && i <= n - 1) {
-                    secondTerm += yList.get(i);
-                }
+            //noinspection SequencedCollectionMethodCanBeUsed
+            firstTerm = yList.get(0) + yList.get(n);
+
+            for (int i = 1; i <= n - 1; i++) {
+
                 if (i % 3 == 0 && i <= n - 3) {
                     thirdTerm += yList.get(i);
+                } else {
+                    secondTerm += yList.get(i);
                 }
             }
 
-            return (3 * h / 10) * (firstTerm + 5 * secondTerm + thirdTerm);
+            return (3*h / 8) * (firstTerm + 3 * secondTerm + 2 * thirdTerm);
         } else {
-            ErrorUtil.weddles_Illegal_Interval();
+            ErrorUtil.simsons_3_8th_Illegal_Interval();
             return Double.NaN;
         }
     }

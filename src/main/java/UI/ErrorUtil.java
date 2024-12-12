@@ -2,13 +2,14 @@ package UI;
 
 import javax.swing.*;
 
-public class ErrorUtils {
+public class ErrorUtil {
 
+    // Execution Errors
     public static void noImageError() {
         JOptionPane.showMessageDialog(
                 null,
                 "Failed to load splash screen image! Please check the file path.",
-                "Error",
+                "Execution Error",
                 JOptionPane.ERROR_MESSAGE
         );
     }
@@ -42,6 +43,35 @@ public class ErrorUtils {
         JOptionPane.showMessageDialog(null,
                 "Division by zero occurred!",
                 "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Input Errors
+    public static void simsons_1_3rd_Illegal_Interval () {
+        JOptionPane.showMessageDialog(null,
+                "Number of subintervals must be even in Simpson's ⅓ rule!",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void simsons_3_8th_Illegal_Interval () {
+        JOptionPane.showMessageDialog(null,
+                "Number of subintervals must multiple of 3 in Simpson's ⅜ rule!",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void weddles_Illegal_Interval () {
+        JOptionPane.showMessageDialog(null,
+                "Number of subintervals must multiple of 6 in Weddle's rule!",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void invalidInput () {
+        JOptionPane.showMessageDialog(null,
+                "Invalid Input Detected!",
+                "Input Error",
                 JOptionPane.ERROR_MESSAGE);
     }
 }
