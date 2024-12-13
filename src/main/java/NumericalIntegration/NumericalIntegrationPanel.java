@@ -22,7 +22,7 @@ public class NumericalIntegrationPanel extends JPanel {
 
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, FONT_SIZE));
 
-        CompUtil.setUpPanel(this, panelColor);
+        CompUtil.setUpPanel(this, panelColor, true);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);

@@ -23,11 +23,14 @@ public class CompUtil {
      *
      * @param PANEL The panel to be created with the specified background.
      * @param COLOR The color of the background of the panel.
+     * @param enableGridBag Whether to enable the GridBagLayout or not.
      */
-    public static void setUpPanel (JPanel PANEL, Color COLOR) {
+    public static void setUpPanel (JPanel PANEL, Color COLOR, boolean enableGridBag) {
         PANEL.setBackground(COLOR);
-        PANEL.setLayout(new GridBagLayout());
-        PANEL.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        if (enableGridBag) {
+            PANEL.setLayout(new GridBagLayout());
+            PANEL.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        }
     }
 
     /**
