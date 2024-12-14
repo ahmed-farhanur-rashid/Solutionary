@@ -57,23 +57,4 @@ public class GaussJordan {
 
         return solution;
     }
-
-    public static void main(String[] args) {
-        // Example usage
-        double[][] matrix = {
-                {2, 1, -1, 3},
-                {1, -3, 2, 2},
-                {-1, 2, -1, -1}
-        };
-
-        double[] solution = solve(matrix);
-        if (solution != null) {
-            System.out.println("Solution:");
-            for (double x : solution) {
-                System.out.printf("%.2f ", x);
-            }
-        } else {
-            System.out.println("No unique solution exists.");
-        }
-    }
 }

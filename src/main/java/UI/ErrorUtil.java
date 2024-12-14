@@ -81,4 +81,12 @@ public class ErrorUtil {
                 "Invalid Input",
                 JOptionPane.ERROR_MESSAGE);
     }
+
+    public static void cellInputMismatch (int rowIndex, int columnIndex) {
+        JOptionPane.showMessageDialog(null,
+                "Invalid input detected at Cell [" + rowIndex + ", " + columnIndex + "].\n" +
+                        "Please enter a valid numerical value.",
+                "Input Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
 }

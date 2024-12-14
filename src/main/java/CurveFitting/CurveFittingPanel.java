@@ -1,12 +1,15 @@
 package CurveFitting;
 
+import CurveFitting.Linear.*;
+import CurveFitting.NonLinear.*;
 import UI.CompUtil;
 import UI.ErrorUtil;
 
 import javax.swing.*;
+import java.awt.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import java.awt.*;
+import java.util.List;
 
 public class CurveFittingPanel extends JPanel {
 
@@ -15,7 +18,7 @@ public class CurveFittingPanel extends JPanel {
     private static final int FONT_SIZE = 18; // Font size for fields
     private static final int LATEX_LABEL_SIZE = 22;
 
-    private JTable table;
+    private final JTable table;
     private DefaultTableModel tableModel;
 
     public CurveFittingPanel(Color panelColor) {
@@ -45,7 +48,7 @@ public class CurveFittingPanel extends JPanel {
                 0, 1, 1, 1, 0, 0, gbc);
 
         // Row 2: JTable for input
-        tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"X", "Y"});
+        tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"x", "y"});
         table = new JTable(tableModel);
         table.setFont(new Font("Arial", Font.BOLD, 16));
         table.setRowHeight(table.getRowHeight() + 20);
@@ -56,7 +59,7 @@ public class CurveFittingPanel extends JPanel {
         JTableHeader tableHeader = table.getTableHeader();
         tableHeader.setFont(new Font("Arial", Font.BOLD, 16));
         tableHeader.setPreferredSize(new Dimension(tableHeader.getPreferredSize().width, 40));
-        JScrollPane scrollPane = new JScrollPane(table);                                                // Create a scrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         gbc.fill = GridBagConstraints.BOTH; // Stretch in both directions
@@ -87,14 +90,12 @@ public class CurveFittingPanel extends JPanel {
 
         // Row 6: Result Label
         JLabel resultLabel = new JLabel("Results will be displayed here.");
-        resultLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        resultLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        CompUtil.addComponent(this, resultLabel, 0, 4, 2, 1, 0, 0, gbc);
-
+        CompUtil.addComponent(this, resultLabel, 0, 4, 2, 2, 0, 0, gbc);
 
 
         // Taking Input From Table
-
         enterButton.addActionListener(_ -> {
             try {
                 // Parse the input from the nField
@@ -118,14 +119,65 @@ public class CurveFittingPanel extends JPanel {
             }
         });
 
+        // Program Logic
         calculateButton.addActionListener(_ -> {
-           // Will be implemented after a bit of testing
+
+            List<Double> xList = CompUtil.extractTableColumnData(table, 0);
+            List<Double> yList = CompUtil.extractTableColumnData(table, 1);
+
+            int n = Integer.parseInt(nField.getText());
+            String method = (String) eqnTypeComboBox.getSelectedItem();
+
+            assert method != null;
+            switch (method) {
+                case "<html><b>y = ax + b</b></html>" -> {
+
+                    String[] columnNames = {"X", "Y", "XY", "X²"};
+                    tableModel = new DefaultTableModel(columnNames, 0);
+                    table.setModel(tableModel);
+
+                    double[] solution = LinearEquation.fit(xList, yList, n, tableModel);
+
+                    resultLabel.setText("a = " + solution[0] + ",   b = " + solution[1]);
+                }
+                case "<html><b>y = ae<sup>bx</sup></b></html>" -> {
+
+                    String[] columnNames = {"X", "y", "Y = lny", "XY", "X²"};
+                    tableModel = new DefaultTableModel(columnNames, 0);
+                    table.setModel(tableModel);
+
+                    double[] solution = ExponentialEquation.fit(xList, yList, n, tableModel);
+
+                    resultLabel.setText("a = " + Math.exp(solution[1]) + ",   b = " + solution[0]); // AntiLog of ln is Math.exp()
+                }
+                case "<html><b>y = ab<sup>x</sup></b></html>" -> {
+                    String[] columnNames = {"X", "y", "Y = lny", "XY", "X²"};
+                    tableModel = new DefaultTableModel(columnNames, 0);
+                    table.setModel(tableModel);
+
+                    double[] solution = ExponentialEquation.fit(xList, yList, n, tableModel);
+
+                    resultLabel.setText("a = " + Math.exp(solution[1]) + ",   b = " + Math.exp(solution[0]));
+                }
+                case "<html><b>y = ax<sup>2</sup> + bx + c</b></html>" -> {
+
+                    String[] columnNames = {"X", "Y", "XY", "X²Y", "X²", "X³", "X⁴"};
+                    tableModel = new DefaultTableModel(columnNames, 0);
+                    table.setModel(tableModel);
+
+                    double[] solution = QuadraticEquation.fit(xList, yList, n, tableModel);
+
+                    resultLabel.setText("a = " + solution[0] + ",   b = " + solution[1] + ",   c = " + solution[2]);
+                }
+            }
         });
 
-        clearButton.addActionListener(_-> {
-           nField.setText("");
-           tableModel.setRowCount(0);
-           resultLabel.setText("Results will be displayed here.");
+        // Clear Button
+        clearButton.addActionListener(_ -> {
+            nField.setText("");
+            tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"x", "y"});
+            table.setModel(tableModel);
+            resultLabel.setText("Results will be displayed here.");
         });
     }
 }

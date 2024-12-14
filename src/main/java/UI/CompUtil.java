@@ -5,7 +5,10 @@ import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CompUtil {
 
@@ -74,6 +77,30 @@ public class CompUtil {
     public static Icon createLatexIcon(String LATEX_TEXT, int TEXT_SIZE) {
         TeXFormula formula = new TeXFormula(LATEX_TEXT);
         return formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, TEXT_SIZE);
+    }
+
+    /**
+     * Creates an Icon containing a rendered LaTeX formula.
+     *
+     * @param table The table to extracted for data.
+     * @param columnIndex  The column to be extracted for data.
+     * @return A List object containing double value of all data at a specific column.
+     */
+    public static java.util.List<Double> extractTableColumnData(JTable table, int columnIndex) {
+
+        List<Double> data = new ArrayList<>();
+
+        int rowNum = table.getRowCount();
+
+        for (int i = 0; i < rowNum; i++) {
+            Object value = table.getValueAt(i, columnIndex); // Use i instead of rowNum
+            try {
+                data.add(Double.valueOf((String) value));
+            } catch (Exception e) {
+                ErrorUtil.cellInputMismatch(i, columnIndex);
+            }
+        }
+        return data;
     }
 
     /**
