@@ -18,7 +18,7 @@ public class NumericalDifferentiationPanel extends JPanel {
     @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public NumericalDifferentiationPanel(Color panelColor) {
         // Set panel properties
-        CompUtil.setUpPanel(this, panelColor, true);
+        CompUtil.setUpPanel(this, panelColor);
         UIManager.put("ScrollBar.thumbArc", 10); // Rounded thumb
         UIManager.put("ScrollBar.thumbInsets", new Insets(2, 2, 2, 2));
         UIManager.put("ScrollBar.track", Color.DARK_GRAY);

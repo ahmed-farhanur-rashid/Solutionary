@@ -74,4 +74,11 @@ public class ErrorUtil {
                 "Input Error",
                 JOptionPane.ERROR_MESSAGE);
     }
+
+    public static void invalidNumberOfRows () {
+        JOptionPane.showMessageDialog(null,
+                "Please enter a valid positive number for the number of rows.",
+                "Invalid Input",
+                JOptionPane.ERROR_MESSAGE);
+    }
 }

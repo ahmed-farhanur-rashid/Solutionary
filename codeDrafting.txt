@@ -1,144 +1,117 @@
-###### I draft & temporarily save code here ######
-
-package NumericalIntegration;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+package CurveFitting;
 
 import UI.CompUtil;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
 
-public class NumericalIntegrationPanel extends JPanel {
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
 
-    private static final int FIELD_HEIGHT = 64; // Double the height of fields
-    private static final int FIELD_WIDTH = 256;
-    private static final int FONT_SIZE = 18; // Larger text size for fields
-    private static final int LATEX_LABEL_SIZE = 20;
+public class CurveFittingPanel extends JPanel {
 
-    public NumericalIntegrationPanel (Color panelColor) {
+    private static final int FIELD_WIDTH = 512; // Adjusted field width
+    private static final int FIELD_HEIGHT = 64; // Adjusted field height
+    private static final int FONT_SIZE = 18; // Font size for fields
+    private static final int LATEX_LABEL_SIZE = 22;
+
+    private JTable table;
+    private DefaultTableModel tableModel;
+
+    public CurveFittingPanel(Color panelColor) {
 
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, FONT_SIZE));
-
-        CompUtil.setUpPanel(panelColor, this);
+        CompUtil.setUpPanel(this, panelColor);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets (5, 5, 5, 5);
+        gbc.insets = new Insets(5, 5, 5, 5); // Insets are border between elements
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Stretches Component Horizontally
+
+
+        // Row 1: DataPoint and nField
+        CompUtil.addComponent(this,
+                CompUtil.createLatexLabel("\\(\\textit{Enter Number of Data Points (n):}\\)", LATEX_LABEL_SIZE, Color.WHITE),
+                0, 0, 1, 1, 0, 0, gbc);
+
+        JTextField nField = CompUtil.createCustomField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
+        CompUtil.addComponent(this, nField, 1, 0, 1, 1, 1, 0, gbc);
+
+
+        // Row 2: Table Input
+        CompUtil.addComponent(this,
+                CompUtil.createLatexLabel("\\(\\textit{Input Table:}\\)", LATEX_LABEL_SIZE, Color.WHITE),
+                0, 1, 1, 1, 1, 1, gbc);
+
+        // Row 2: JTable for input
+        tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"X", "Y"});
+        table = new JTable(tableModel);
+        table.setFont(new Font("Arial", Font.BOLD, 16));
+        table.setRowHeight(table.getRowHeight() + 20);
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setFont(new Font("Arial", Font.BOLD, 16));
+        tableHeader.setPreferredSize(new Dimension(tableHeader.getPreferredSize().width, 40));
+        JScrollPane scrollPane = new JScrollPane(table);                                                // Create a scrollPane
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        gbc.fill = GridBagConstraints.BOTH; // Stretch in both directions
+        CompUtil.addComponent(this, scrollPane, 1, 1, 1, 1, 1, 1, gbc);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-
-        //************************************************************************//
-        // Adding components to GridBag layout, Row & Column starts at zero here. //
-        //************************************************************************//
-
-        //*****************//
-        //      Row 0      //
-        //*****************//
-
-        JTextField bField = new JTextField(2);
-        bField.setFont(new Font("Arial", Font.PLAIN, 14)); // Font size
-        gbc.gridx = 2; // Column 1
-        gbc.gridy = 0; // Row 0
-        gbc.weightx = 0; // No horizontal expansion
-        gbc.weighty = 0; // No vertical expansion
-        add(bField, gbc);
-
+        // Row 3: comboBox
         CompUtil.addComponent(this,
-                CompUtil.createSizedField(36, 36, 14),
-                2, 0, 0, 0, 0, 0, gbc
-        );
+                CompUtil.createLatexLabel("\\(\\textit{Type of Eqn. To Fit To Data Points (n):}\\)", LATEX_LABEL_SIZE, Color.WHITE),
+                0, 2, 1, 0, 0, 0, gbc);
 
-        //*****************//
-        //      Row 1      //
-        //*****************//
-
-        // Adds label("Enter Function and It's Limits:") to column: 0.
-        CompUtil.addComponent(this,
-                CompUtil.createLatexLabel("\\(\\textit{Enter Function and It's Limits:}\\)", LATEX_LABEL_SIZE, Color.WHITE),
-                0, 1, 1, 1, 0, 0, gbc
-        );
-
-        // Adds emptySpace(128px) to column: 1.
-        CompUtil.addComponent(this,
-                CompUtil.createLatexLabel("\\hspace{128pt}", LATEX_LABEL_SIZE, Color.WHITE),
-                1, 1, 1, 1, 0, 0, gbc
-        );
-
-
-        addLatexLabel("\\int\\hspace{30pt}", 30, 2, 1, gbc);
-        JTextField functionField = CompUtil.createSizedField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
-        gbc.gridx = 3;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1; // Span across columns
-        gbc.weightx = 0; // Allow horizontal expansion
-        add(functionField, gbc);
-
-        JTextField aField = new JTextField(2);
-        aField.setFont(new Font("Arial", Font.PLAIN, 14)); // Font size
-        gbc.gridx = 2; // Column 1
-        gbc.gridy = 2; // Row 2
-        gbc.weightx = 0; // No horizontal expansion
-        gbc.weighty = 0; // No vertical expansion
-        add(aField, gbc);
-
-        // To dynamically set function field size, fucking finally.
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(functionField); // Get the parent JFrame
-                int size;
-                // Check if the frame is fullscreen
-                if (frame != null && frame.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
-                    size = 512; // Set size for fullscreen
-                } else {
-                    size = 256; // Set size for normal state
-                }
-                functionField.setPreferredSize(new Dimension(size, FIELD_HEIGHT));
-                revalidate();
-                repaint();
-            }
+        JComboBox<String> eqnTypeComboBox = new JComboBox<>(new String[]{
+                "<html><b>y = ax + b</b></html>",                   // Bold
+                "<html><b>y = ae<sup>bx</sup></b></html>",          // Superscript
+                "<html><b>y = ab<sup>x</sup></b></html>",           // Superscript
+                "<html><b>y = ax<sup>2</sup> + bx + c</b></html>"   // Quadratic with superscript
         });
+        eqnTypeComboBox.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
 
-        addLatexLabel("dx", 30, 4, 1, gbc);
+        CompUtil.addComponent(this, eqnTypeComboBox, 1, 2, 1, 0, 1, 0, gbc);
 
-//        CompUtil.addComponent(this,
-//                CompUtil.createLatexLabel("dx", 30, Color.WHITE),
-//                4, 1,0, 0, 0, 0, gbc
-//        );
-
-        // Row 2: [3] Label, Select method, Calculate, clear
-        addLatexLabel("\\(\\textit{Select Calculation Method:}\\)", 20, 0, 3, gbc);
-
-        JComboBox<String> methodComboBox = new JComboBox<>(new String[]{
-                "Trapezoidal Rule", "Simpson's ⅓ Rule", "Simpson's ⅜ Rule", "Weddle's Rule"
-        });
-        methodComboBox.setFont(new Font("Arial", Font.PLAIN, FONT_SIZE));
-        addField(methodComboBox, 2, 3, 4, gbc);
-
+        // Row 4: Calculate & Clear
         JButton calculateButton = new JButton("Calculate");
-        gbc.gridx = 2;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2; // Single column
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1; // Single column
         add(calculateButton, gbc);
 
         JButton clearButton = new JButton("Clear");
-        gbc.gridx = 4;
-        gbc.gridy = 4;
-        gbc.gridwidth = 1; // Single column
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
         add(clearButton, gbc);
+
+        // Row 6: Empty
+
+//        JLabel empty = new JLabel("");
+//        gbc.gridx = 0;
+//        gbc.gridy = 4;
+//        gbc.gridwidth = 2;
+//        add(empty, gbc);
+
+        // Row 6: Result Label
+        JLabel resultLabel = new JLabel("Results will be displayed here.");
+        resultLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        add(resultLabel, gbc);
+
     }
 
     //----------------------------------------------------------------
     // Helper Methods
     //----------------------------------------------------------------
 
-    private void addLatexLabel(String latexText, int size, int x, int y, GridBagConstraints gbc) {
+    private void addLatexLabel(String latexText, int x, int y, GridBagConstraints gbc) {
         TeXFormula formula = new TeXFormula(latexText);
-        TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, size);
+        TeXIcon icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20);
         JLabel latexLabel = new JLabel(icon);
         latexLabel.setForeground(Color.WHITE); // White text color
         gbc.gridx = x;
@@ -146,6 +119,7 @@ public class NumericalIntegrationPanel extends JPanel {
         gbc.gridwidth = 1; // Single column
         gbc.weightx = 0; // No horizontal expansion
         gbc.weighty = 0; // No vertical expansion
+        gbc.anchor = GridBagConstraints.EAST; // Align to the right
         add(latexLabel, gbc);
     }
 
