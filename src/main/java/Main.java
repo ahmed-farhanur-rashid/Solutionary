@@ -1,7 +1,5 @@
 import UI.*;
 import javax.swing.*;
-import java.awt.*;
-import java.util.Arrays;
 
 public class Main {
 
@@ -12,8 +10,5 @@ public class Main {
 
         //SwingUtilities.invokeLater(SolutionarySplashScreen::new);
         SwingUtilities.invokeLater(UI::new);
-
-        //System.out.println(Arrays.toString(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
-        //System.out.println(UIManager.getFont("Label.font").getName());
     }
 }

@@ -30,6 +30,8 @@ public class NumericalDifferentiationPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5); // Add spacing between components
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+
+
         // Row 0: Label & functionField
         CompUtil.addComponent(this,
                 CompUtil.createLatexLabel("\\(\\textit{Enter } \\frac{dy}{dx} = f(x, y):\\)", LATEX_LABEL_SIZE, Color.WHITE),
@@ -40,10 +42,6 @@ public class NumericalDifferentiationPanel extends JPanel {
         functionField.setMinimumSize(new Dimension(FIELD_WIDTH, FIELD_HEIGHT));
         CompUtil.addComponent(this, functionField, 1, 0, 1, 1, 1, 0, gbc);
 
-//        CompUtil.addComponent(this,
-//                CompUtil.createLatexLabel("\\hspace{16px}", LATEX_LABEL_SIZE, Color.WHITE),
-//                2, 0, 1, 1, 1, 0, gbc
-//        );
 
         // Row 1: Initial Conditions Panel
         CompUtil.addComponent(this,
@@ -166,5 +164,17 @@ public class NumericalDifferentiationPanel extends JPanel {
             }
         });
 
+        clearButton.addActionListener(_ -> {
+
+            functionField.setText("");
+            x0Field.setText("");
+            y0Field.setText("");
+            stepSizeField.setText("");
+            solveForXField.setText("");
+
+            resultPanel.removeAll();   // Clear previous steps to start fresh
+            resultPanel.revalidate();  // Recalculate layout
+            resultPanel.repaint();     // Redraw panel
+        });
     }
 }
