@@ -177,7 +177,7 @@ public class UI extends JFrame {
 
     private void setUpFrame (JFrame frame) {
         // Setting up the frame.
-        frame.setTitle("Solutionary 0.1.3-Beta3"); // See Apache Commons Versioning
+        frame.setTitle("Solutionary 1.0.0"); // See Apache Commons Versioning
         frame.setSize(1200, 720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
