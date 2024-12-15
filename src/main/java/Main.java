@@ -8,7 +8,7 @@ public class Main {
         // Set DPI-aware system properties (Java 9+ only)
         System.setProperty("sun.java2d.uiScale", "1.0");
 
-        //SwingUtilities.invokeLater(SolutionarySplashScreen::new);
-        SwingUtilities.invokeLater(UI::new);
+        SwingUtilities.invokeLater(SolutionarySplashScreen::new);
+        //SwingUtilities.invokeLater(UI::new);
     }
 }

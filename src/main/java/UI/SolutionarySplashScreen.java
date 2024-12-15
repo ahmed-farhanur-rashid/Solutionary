@@ -15,7 +15,7 @@ public class SolutionarySplashScreen {
         splashFrame.setLayout(new BorderLayout());
 
         // Load and validate the splash image
-        JLabel imageLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/splashScreen.png"))));
+        JLabel imageLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/splashScreen.gif"))));
         splashFrame.add(imageLabel, BorderLayout.CENTER);
 
         // Create a progress bar
