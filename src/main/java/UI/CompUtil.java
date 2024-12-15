@@ -48,14 +48,13 @@ public class CompUtil {
         return field;
     }
 
-//    /**
-//     * Creates a JTextField with a specified size and font properties.
-//     *
-//     * @param FIELD_WIDTH  The width of the text field in pixels.
-//     * @param FIELD_HEIGHT The height of the text field in pixels.
-//     * @param FONT_SIZE    The size of the font to be applied to the text in the text field.
-//     * @return A configured JTextField with the specified width, height, and font size.
-//     */
+    /**
+     * Creates a custom-styled JTable with the specified font size and properties.
+     *
+     * @param tableModel The DefaultTableModel used as the data model for the JTable
+     * @param FONT_SIZE The font size for the table's text
+     * @return a customized JTable with the specified styling
+     */
     public static JTable createCustomTable(DefaultTableModel tableModel, int FONT_SIZE) {
 
         JTable table = new JTable(tableModel);
