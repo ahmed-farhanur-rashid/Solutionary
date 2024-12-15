@@ -12,6 +12,7 @@ public class SolutionarySplashScreen extends JFrame {
         setSize(768, 432); // Fixed size
         setLocationRelativeTo(null); // Center the frame
         setLayout(new BorderLayout());
+        setIconImage(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/frameIcon.png"))).getImage());
 
         // Load and validate the splash image
         JLabel imageLabel = new JLabel(new ImageIcon(Objects.requireNonNull(getClass().getResource("/resources/splashScreen.gif"))));
