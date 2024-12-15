@@ -1,4 +1,4 @@
-package Interpolation;
+package ExtraTools;
 
 import UI.CompUtil;
 import UI.ErrorUtil;
@@ -6,9 +6,8 @@ import UI.ErrorUtil;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.List;
 
-public class InterpolationPanel extends JPanel {
+public class LegacyInterpolationPanel extends JPanel {
 
     private static final int FIELD_WIDTH = 256; // Adjusted field width
     private static final int FIELD_HEIGHT = 64; // Adjusted field height
@@ -17,7 +16,7 @@ public class InterpolationPanel extends JPanel {
     private final JTable table;
     private DefaultTableModel tableModel;
 
-    public InterpolationPanel(Color panelColor) {
+    public LegacyInterpolationPanel(Color panelColor) {
 
         // Setting Up Panel
         UIManager.put("Button.font", new Font("Arial", Font.BOLD, FONT_SIZE));
@@ -35,16 +34,12 @@ public class InterpolationPanel extends JPanel {
 
         // Column 0
         CompUtil.addComponent(this,
-                CompUtil.createLatexLabel("\\(\\textit{Enter Number of Elements, (n):}\\)", LATEX_LABEL_SIZE, Color.WHITE),
+                CompUtil.createLatexLabel("\\(\\textit{(Optional) Enter y = f(x):}\\)", LATEX_LABEL_SIZE, Color.WHITE),
                 0, 0, 1, 1, 0, 0, gbc);
 
-        // Column 1
-        JTextField nField = CompUtil.createCustomField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
-        CompUtil.addComponent(this, nField, 1, 0, 1, 1, 1, 0, gbc);
-
-        // Column 2
-        JButton enterButton = new JButton("Enter");
-        CompUtil.addComponent(this, enterButton, 2, 0, 1, 1, 0, 0, gbc);
+        // Column 1, 2
+        JTextField functionField = CompUtil.createCustomField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
+        CompUtil.addComponent(this, functionField, 1, 0, 2, 1, 0, 0, gbc);
 
 
         //*****************//
@@ -54,18 +49,16 @@ public class InterpolationPanel extends JPanel {
 
         // Column 0
         CompUtil.addComponent(this,
-                CompUtil.createLatexLabel("\\(\\textit{Input Table:}\\)", LATEX_LABEL_SIZE, Color.WHITE),
+                CompUtil.createLatexLabel("\\(\\textit{Enter Number of Elements, (n):}\\)", LATEX_LABEL_SIZE, Color.WHITE),
                 0, 1, 1, 1, 0, 0, gbc);
 
-        // Column 1, 2
-        tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"x", "y"});
-        table = CompUtil.createCustomTable(tableModel, FONT_SIZE);
+        // Column 1
+        JTextField nField = CompUtil.createCustomField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
+        CompUtil.addComponent(this, nField, 1, 1, 1, 1, 1, 0, gbc);
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        gbc.fill = GridBagConstraints.BOTH; // Stretch in both directions
-        CompUtil.addComponent(this, scrollPane, 1, 1, 2, 1, 1, 1, gbc);
+        // Column 2
+        JButton enterButton = new JButton("Enter");
+        CompUtil.addComponent(this, enterButton, 2, 1, 1, 1, 0, 0, gbc);
 
 
         //*****************//
@@ -75,18 +68,18 @@ public class InterpolationPanel extends JPanel {
 
         // Column 0
         CompUtil.addComponent(this,
-                CompUtil.createLatexLabel("\\textit{Determine } y = f(x) \\text{ at } x:", LATEX_LABEL_SIZE, Color.WHITE),
+                CompUtil.createLatexLabel("\\(\\textit{Input Table:}\\)", LATEX_LABEL_SIZE, Color.WHITE),
                 0, 2, 1, 1, 0, 0, gbc);
 
-        // Column 1
-        JTextField xField = CompUtil.createCustomField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
-        CompUtil.addComponent(this, xField, 1, 2, 1, 1, 1, 0, gbc);
+        // Column 1, 2
+        tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"x", "y"});
+        table = CompUtil.createCustomTable(tableModel, FONT_SIZE);
 
-        // Column 2     [Row - 3 & 4]
-        JLabel resultLabel = new JLabel("   y = f(x) at x: ");
-        resultLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        resultLabel.setFont(new Font("Arial", Font.BOLD, FONT_SIZE));
-        CompUtil.addComponent(this, resultLabel, 2, 2, 1, 2, 1, 0, gbc);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        gbc.fill = GridBagConstraints.BOTH; // Stretch in both directions
+        CompUtil.addComponent(this, scrollPane, 1, 2, 2, 1, 1, 1, gbc);
 
 
         //*****************//
@@ -95,12 +88,33 @@ public class InterpolationPanel extends JPanel {
 
 
         // Column 0
+        CompUtil.addComponent(this,
+                CompUtil.createLatexLabel("\\textit{Determine } y = f(x) \\text{ at } x:", LATEX_LABEL_SIZE, Color.WHITE),
+                0, 3, 1, 1, 0, 0, gbc);
+
+        // Column 1
+        JTextField xField = CompUtil.createCustomField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
+        CompUtil.addComponent(this, xField, 1, 3, 1, 1, 1, 0, gbc);
+
+        // Column 2, Row - 3 & 4
+        JLabel resultLabel = new JLabel("   y = f(x) at x: ");
+        resultLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        resultLabel.setFont(new Font("Arial", Font.BOLD, FONT_SIZE));
+        CompUtil.addComponent(this, resultLabel, 2, 3, 1, 2, 1, 0, gbc);
+
+
+        //*****************//
+        //      Row 4      //
+        //*****************//
+
+
+        // Column 0
         JButton clearButton = new JButton("Clear");
-        CompUtil.addComponent(this, clearButton, 0, 3, 1, 1, 0, 0, gbc);
+        CompUtil.addComponent(this, clearButton, 0, 4, 1, 1, 0, 0, gbc);
 
         // Column 1
         JButton calculateButton = new JButton("Calculate");
-        CompUtil.addComponent(this, calculateButton, 1, 3, 1, 1, 0, 0, gbc);
+        CompUtil.addComponent(this, calculateButton, 1, 4, 1, 1, 0, 0, gbc);
 
         // Column 2 contains lower half of result Label.
 
@@ -110,18 +124,17 @@ public class InterpolationPanel extends JPanel {
 
 
         //*****************//
-        //      Row 4      //
+        //      Row 5      //
         //*****************//
 
 
         JLabel emptyLabel = new JLabel("");
-        CompUtil.addComponent(this, emptyLabel, 0, 4, 3, 1, 1, 0, gbc);
+        CompUtil.addComponent(this, emptyLabel, 0, 5, 3, 1, 1, 0, gbc);
 
 
         //**************************************************//
         //      Action Listener & Logic Implementation      //
         //**************************************************//
-
 
         // Enter Button
         enterButton.addActionListener(_ -> {
@@ -150,29 +163,16 @@ public class InterpolationPanel extends JPanel {
         // Calculate Button
         calculateButton.addActionListener(_ -> {
 
-            List<Double> xList = CompUtil.extractTableColumnData(table, 0);
-            List<Double> yList = CompUtil.extractTableColumnData(table, 1);
-
-            int n = Integer.parseInt(nField.getText().trim());
-
-            double result = Lagrange.solve (xList, yList, n);
-
-            resultLabel.setText("   y = f(x) at x: " + result);
-            resultLabel.setForeground(Color.RED);
         });
 
         // Clear Button
         clearButton.addActionListener(_ -> {
-
+            functionField.setText("");
             nField.setText("");
-
             tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"x", "y"});
             table.setModel(tableModel);
-
             xField.setText("");
-
             resultLabel.setText("   y = f(x) at x: ");
-            resultLabel.setForeground(null);
         });
     }
 
