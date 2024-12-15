@@ -6,6 +6,7 @@ import org.scilab.forge.jlatexmath.TeXIcon;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,31 @@ public class CompUtil {
         field.setPreferredSize(new Dimension(FIELD_WIDTH, FIELD_HEIGHT)); // Height adjustment
         field.setFont(new Font("Arial", Font.BOLD, FONT_SIZE)); // Font size
         return field;
+    }
+
+//    /**
+//     * Creates a JTextField with a specified size and font properties.
+//     *
+//     * @param FIELD_WIDTH  The width of the text field in pixels.
+//     * @param FIELD_HEIGHT The height of the text field in pixels.
+//     * @param FONT_SIZE    The size of the font to be applied to the text in the text field.
+//     * @return A configured JTextField with the specified width, height, and font size.
+//     */
+    public static JTable createCustomTable(DefaultTableModel tableModel, int FONT_SIZE) {
+
+        JTable table = new JTable(tableModel);
+
+        table.setFont(new Font("Arial", Font.BOLD, FONT_SIZE-2));
+        table.setRowHeight(table.getRowHeight() + 20);
+
+        table.setShowGrid(true); // Enable gridlines
+        table.setGridColor(Color.DARK_GRAY); // Set GridLine color
+
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setFont(new Font("Arial", Font.BOLD, FONT_SIZE));
+        tableHeader.setPreferredSize(new Dimension(tableHeader.getPreferredSize().width, 40));
+
+        return table;
     }
 
     /**
