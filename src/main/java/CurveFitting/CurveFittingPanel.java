@@ -8,7 +8,6 @@ import UI.ErrorUtil;
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.util.List;
 
 public class CurveFittingPanel extends JPanel {
@@ -31,46 +30,57 @@ public class CurveFittingPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL; // Stretches Component Horizontally
 
 
-        // Row 1: DataPoint and nField
+        //*****************//
+        //      Row 0      //
+        //*****************//
+
+
+        // Column 0
         CompUtil.addComponent(this,
                 CompUtil.createLatexLabel("\\(\\textit{Enter Number of Data Points (n):}\\)", LATEX_LABEL_SIZE, Color.WHITE),
                 0, 0, 1, 1, 0, 0, gbc);
 
+        // Column 1
         JTextField nField = CompUtil.createCustomField(FIELD_WIDTH, FIELD_HEIGHT, FONT_SIZE);
         CompUtil.addComponent(this, nField, 1, 0, 1, 1, 0.5, 0, gbc);
 
+        // Column 2
         JButton enterButton = new JButton("Enter");
         CompUtil.addComponent(this, enterButton, 2, 0, 1, 1, 0.5, 0, gbc);
 
-        // Row 2: Table Input
+
+        //*****************//
+        //      Row 1      //
+        //*****************//
+
+
+        // Column 0
         CompUtil.addComponent(this,
                 CompUtil.createLatexLabel("\\(\\textit{Input Table:}\\)", LATEX_LABEL_SIZE, Color.WHITE),
                 0, 1, 1, 1, 0, 0, gbc);
 
-        // Row 2: JTable for input
+        // Column 1, 2
         tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"x", "y"});
-        table = new JTable(tableModel);
-        table.setFont(new Font("Arial", Font.BOLD, 16));
-        table.setRowHeight(table.getRowHeight() + 20);
-
-        table.setShowGrid(true); // Enable gridlines
-        table.setGridColor(Color.DARK_GRAY); // Set GridLine color
-
-        JTableHeader tableHeader = table.getTableHeader();
-        tableHeader.setFont(new Font("Arial", Font.BOLD, 16));
-        tableHeader.setPreferredSize(new Dimension(tableHeader.getPreferredSize().width, 40));
+        table = CompUtil.createCustomTable(tableModel, FONT_SIZE);
+        // Adding scrollPane to table
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
+        // Adding table to layout.
         gbc.fill = GridBagConstraints.BOTH; // Stretch in both directions
         CompUtil.addComponent(this, scrollPane, 1, 1, 2, 1, 1, 1, gbc);
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Row 3: comboBox
+
+        //*****************//
+        //      Row 2      //
+        //*****************//
+
+
+        // Column 0
         CompUtil.addComponent(this,
                 CompUtil.createLatexLabel("\\(\\textit{Type of Eqn. To Fit To Data Points (n):}\\)", LATEX_LABEL_SIZE, Color.WHITE),
                 0, 2, 1, 1, 0, 0, gbc);
 
+        // Column 1, 2
         JComboBox<String> eqnTypeComboBox = new JComboBox<>(new String[]{
                 "<html><b>y = ax + b</b></html>",                   // Bold
                 "<html><b>y = ae<sup>bx</sup></b></html>",          // Superscript
@@ -81,18 +91,36 @@ public class CurveFittingPanel extends JPanel {
 
         CompUtil.addComponent(this, eqnTypeComboBox, 1, 2, 2, 1, 1, 0, gbc);
 
-        // Row 4: Calculate & Clear
-        JButton clearButton = new JButton("Clear");
-        CompUtil.addComponent(this, clearButton, 0, 3, 1, 1, 1, 0, gbc);
 
+        //*****************//
+        //      Row 3      //
+        //*****************//
+
+
+        // Column 0
+        JButton clearButton = new JButton("Clear");
+        CompUtil.addComponent(this, clearButton, 0, 3, 1, 1, 0, 0, gbc);
+
+        // Column 1, 2
         JButton calculateButton = new JButton("Calculate");
         CompUtil.addComponent(this, calculateButton, 1, 3, 2, 1, 1, 0, gbc);
 
-        // Row 6: Result Label
+
+        //*****************//
+        //      Row 4      //
+        //*****************//
+
+
+        // Column 1, 2, 3
         JLabel resultLabel = new JLabel("Results will be displayed here.");
         resultLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        CompUtil.addComponent(this, resultLabel, 0, 4, 2, 2, 0, 0, gbc);
+        CompUtil.addComponent(this, resultLabel, 0, 4, 3, 2, 0, 0, gbc);
+
+
+        //**************************************************//
+        //      Action Listener & Logic Implementation      //
+        //**************************************************//
 
 
         // Taking Input From Table
