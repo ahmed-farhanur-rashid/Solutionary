@@ -154,8 +154,9 @@ public class InterpolationPanel extends JPanel {
             List<Double> yList = CompUtil.extractTableColumnData(table, 1);
 
             int n = Integer.parseInt(nField.getText().trim());
+            double x = Double.parseDouble(xField.getText());
 
-            double result = Lagrange.solve (xList, yList, n);
+            double result = Lagrange.solve (xList, yList, n, x);
 
             resultLabel.setText("   y = f(x) at x: " + result);
             resultLabel.setForeground(Color.RED);
